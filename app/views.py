@@ -7,9 +7,25 @@ from django.shortcuts import render
 
 # from .app.forms import SlangForm
 
+# def slang_list(request):
+#     slang_words = SlangWord.objects.all()
+#     return render(request, 'new_slang_list.html', {'slang_words': slang_words})
+
+from django.shortcuts import render
+from .models import SlangWord
+
+# def slang_list(request):
+#     slang_words = SlangWord.objects.all()
+#     return render(request, "new_slang_list.html", {"slang_words": slang_words})
+
+
 def slang_list(request):
     slang_words = SlangWord.objects.all()
-    return render(request, 'new_slang_list.html', {'slang_words': slang_words})
+    for slang in slang_words:
+        slang.tag_list = slang.tags.split(",")  # Add a list attribute to each object
+
+    return render(request, "new_slang_list.html", {"slang_words": slang_words})
+
 
 def add_slang(request):
     if request.method == 'POST':

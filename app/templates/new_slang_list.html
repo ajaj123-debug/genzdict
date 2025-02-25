@@ -188,7 +188,12 @@
         }
 
         .card-body {
+            position: relative;
+            background: linear-gradient(to bottom, rgba(30, 41, 59, 0.6), rgba(30, 41, 59, 0.9));
+            backdrop-filter: blur(12px);
             padding: 1.5rem;
+            border-radius: 0 0 16px 16px;
+            transition: all 0.3s ease;
         }
 
         .card-title {
@@ -266,46 +271,16 @@
         </div>
     </nav>
     
-    <div class="container-fluid" style="margin-top: 80px;" >
+    <div class="container-fluid" style="margin-top: 100px; padding: 1.5rem !important;">
         <div class="row mt-4">
-            <!-- Sidebar -->
-            <aside class="col-lg-3 ">
-                <div class="sidebar p-4" >
-                    <h2 class="h4 mb-4 mt-3" style="color: white;">Explore</h2>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <a class="sidebar-link" href="#">
-                                <i class="fas fa-book mr-3"></i>
-                                <span>Dictionary</span>
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="sidebar-link" href="#">
-                                <i class="fas fa-exchange-alt mr-3"></i>
-                                <span>Synonyms</span>
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="sidebar-link" href="#">
-                                <i class="fas fa-quote-right mr-3"></i>
-                                <span>Examples</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <button class="save-btn w-100 mt-4">
-                        <i class="fas fa-bookmark mr-2"></i>Save Word
-                    </button>
-                </div>
-            </aside>
-
             <!-- Main Content -->
-            <main class="col-lg-9 ">
+            <main class="col-12 mt-3">
                 <div class="search-container glass-card mb-4 mt-4">
                     <h1 class="section-title mb-4">Discover Gen Z Slang 🔥</h1>
                     <div class="input-group">
                         <input class="form-control search-input mr-3" id="searchInput" placeholder="Search for slang..." type="text"/>
                         <div class="input-group-append">
-                            <button class="btn search-btn" type="button" onclick="searchSlang()" style="padding: 0.50rem 1.9rem !important;">
+                            <button class="btn search-btn" type="button" onclick="searchSlang()" style="padding: 0.66rem 1.5rem !important;">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -315,7 +290,7 @@
                 <div class="row" id="slangContainer">
                     {% for slang in slang_words %}
                     <div class="col-md-4 mb-4">
-                        <div class="card glass-card h-100">
+                        <div class="card glass-card h-100" data-tags="{{ slang.tags }}">
                             <img src="{{ slang.image_url }}" class="card-img-top" alt="{{ slang.word }} - representation">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -326,6 +301,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     {% empty %}
                     <div class="col-12 text-center">
                         <p style="color: #909296;">No slang words have been added yet.</p>
@@ -344,22 +320,25 @@
             const searchInput = document.getElementById('searchInput');
             const filter = searchInput.value.toLowerCase();
             const cards = document.querySelectorAll('.card');
-
+        
             cards.forEach(card => {
                 const title = card.querySelector('.card-title').textContent.toLowerCase();
                 const text = card.querySelector('.card-text').textContent.toLowerCase();
+                const tags = card.getAttribute('data-tags') ? card.getAttribute('data-tags').toLowerCase() : '';
                 const cardContainer = card.closest('.col-md-4');
-                
-                if (title.includes(filter) || text.includes(filter)) {
+        
+                if (title.includes(filter) || text.includes(filter) || tags.includes(filter)) {
                     cardContainer.style.display = '';
                 } else {
                     cardContainer.style.display = 'none';
                 }
             });
         }
+        
+        document.getElementById('searchInput').addEventListener('keyup', searchSlang);
+        
 
         document.getElementById('searchInput').addEventListener('keyup', searchSlang);
     </script>
 </body>
 </html>
-
