@@ -20,7 +20,8 @@ from .models import SlangWord
 
 
 def slang_list(request):
-    slang_words = SlangWord.objects.all()
+    slang_words = SlangWord.objects.all()[:12]  # Limit to the first 12 slang words
+
     for slang in slang_words:
         slang.tag_list = slang.tags.split(",")  # Add a list attribute to each object
 
